@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Prueba técnica con TypeScript y React
 
 Esto es una prueba técnica de una empresa europea para un sueldo de 55000 €/anuales.
@@ -20,3 +21,7 @@ Los pasos a seguir:
 - [x] Add a new feature that allows the user to sort the data by age.
 - [x] Add a new feature that allows the user to sort the data by gender.
 - [x] Add a new feature that allows the user to sort the data by username.
+=======
+# list-of-clients
+LISTA DE CLIENTES, QUE TIENE DIVERSAS FUNCIONES
+>>>>>>> efee33a797dd9c15903b4cc63ea5e9339675a7e6
