@@ -1,11 +1,19 @@
 import { useMemo, useState } from 'react';
 import './App.css';
-import { SortBy } from './types.d';
+import { SortBy, type User } from './types.d';
 import { UserList } from './components/UserList';
 import { useUsers } from './hooks/useUsers';
 
 function App() {
-  const { isLoading, isError, users, refetch, fetchNextPage, hasNextPage, deletedUser } = useUsers();
+  const {
+    isLoading,
+    isError,
+    users,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    deletedUser,
+  } = useUsers();
 
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
 
@@ -66,13 +74,14 @@ function App() {
   };
 
   const handleDeleteSort = () => {
-    setSorting(SortBy.NONE);
+    setSorting(SortBy.NONE);  
+    setDirectionChange(false);
   };
 
   const filteredUsers = useMemo(() => {
     return filterCountry !== null && filterCountry?.length > 0
-      ? users.filter(user => {
-          return user.location.country
+    ? users.filter(user => {
+    return user.location.country
             .toLowerCase()
             .includes(filterCountry.toLowerCase());
         })
@@ -86,59 +95,39 @@ function App() {
   const sortedUsers = useMemo(() => {
     if (sorting === SortBy.NONE) return filteredUsers;
 
-    if (sorting === SortBy.NAME) {
-      return directionChange
-        ? filteredUsers.toSorted((a, b) =>
-            a.name.first.localeCompare(b.name.first)
-          )
-        : filteredUsers.toSorted((a, b) =>
-            b.name.first.localeCompare(a.name.first)
-          );
-    }
+    const compare = (a: User, b: User) => {
+      switch (sorting) {
+        case SortBy.NAME:
+          return directionChange
+            ? a.name.first.localeCompare(b.name.first)
+            : b.name.first.localeCompare(a.name.first);
+        case SortBy.LAST:
+          return directionChange
+            ? a.name.last.localeCompare(b.name.last)
+            : b.name.last.localeCompare(a.name.last);
+        case SortBy.COUNTRY:
+          return directionChange
+            ? a.location.country.localeCompare(b.location.country)
+            : b.location.country.localeCompare(a.location.country);
+        case SortBy.AGE:
+          return directionChange
+            ? b.dob.age - a.dob.age
+            : a.dob.age - b.dob.age;
+        case SortBy.GENDER:
+          return directionChange
+            ? b.gender.localeCompare(a.gender)
+            : a.gender.localeCompare(b.gender);
+        case SortBy.USERNAME:
+          return directionChange
+            ? b.login.username.localeCompare(a.login.username)
+            : a.login.username.localeCompare(b.login.username);
+        default:
+          return 0;
+      }
+    };
 
-    if (sorting === SortBy.LAST) {
-      return directionChange
-        ? filteredUsers.toSorted((a, b) =>
-            a.name.last.localeCompare(b.name.last)
-          )
-        : filteredUsers.toSorted((a, b) =>
-            b.name.last.localeCompare(a.name.last)
-          );
-    }
-
-    if (sorting === SortBy.COUNTRY) {
-      return filteredUsers.toSorted((a, b) =>
-        directionChange
-          ? a.location.country.localeCompare(b.location.country)
-          : b.location.country.localeCompare(a.location.country)
-      );
-    }
-
-    if (sorting === SortBy.AGE) {
-      return [...filteredUsers].toSorted((a, b) =>
-        directionChange
-          ? b.dob.age.toString().localeCompare(a.dob.age.toString())
-          : a.dob.age.toString().localeCompare(b.dob.age.toString())
-      );
-    }
-
-    if (sorting === SortBy.GENDER) {
-      return [...filteredUsers].toSorted((a, b) =>
-        directionChange
-          ? b.gender.localeCompare(a.gender)
-          : a.gender.localeCompare(b.gender)
-      );
-    }
-
-    if (sorting === SortBy.USERNAME) {
-      return [...filteredUsers].toSorted((a, b) =>
-        directionChange
-          ? b.login.username.localeCompare(a.login.username)
-          : a.login.username.localeCompare(b.login.username)
-      );
-    }
-
-    return filteredUsers;
+    const sorted = [...filteredUsers].sort(compare);
+    return sorted;
   }, [filteredUsers, sorting, directionChange]);
 
   return (
@@ -147,42 +136,36 @@ function App() {
       <header>
         <button onClick={toggleColors}>Colorear filas</button>
         <button onClick={toggleSortByCountry}>
-          {sorting === SortBy.COUNTRY
-            ? 'No ordenar por pais'
-            : 'Ordenar por pais'}
+          {sorting === SortBy.COUNTRY ? 'No ordenar por pais' : 'Ordenar por pais'}
         </button>
         <button onClick={toggleSortByAge}>
           {sorting === SortBy.AGE ? 'No ordenar por edad' : 'Ordenar por edad'}
         </button>
         <button onClick={toggleSortByGender}>
-          {sorting === SortBy.GENDER
-            ? 'No ordenar por género'
-            : 'Ordenar por género'}
+          {sorting === SortBy.GENDER ? 'No ordenar por género' : 'Ordenar por género'}
         </button>
         <button onClick={toggleSortByUsername}>
-          {sorting === SortBy.USERNAME
-            ? 'No ordenar por nombre de usuario'
-            : 'Ordenar por nombre de usuario'}
+          {sorting === SortBy.USERNAME ? 'No ordenar por usuario' : 'Ordenar de usuario'}
         </button>
         <button onClick={handleRestore}>Restaurar</button>
         <input
           type="text"
-          placeholder="Filtrar por pais"
-          onChange={e => setFilterCountry(e.target.value)}
+          placeholder="Filtrar por edad"
+          onChange={e => setFilterAge(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Filtrar por edad"
-          onChange={e => setFilterAge(e.target.value)}
+          placeholder="Filtrar por pais"
+          onChange={e => setFilterCountry(e.target.value)}
         />
         <button
           onClick={() => setDirectionChange(!directionChange)}
           disabled={sorting === SortBy.NONE}
         >
           {directionChange ? (
-            <span className="material-symbols-outlined">edit_arrow_up</span>
+            <span className="material-symbols-outlined">arrow_upward</span>
           ) : (
-            <span className="material-symbols-outlined">edit_arrow_down</span>
+            <span className="material-symbols-outlined">arrow_downward</span>
           )}
         </button>
         <button onClick={handleDeleteSort} disabled={sorting === SortBy.NONE}>
@@ -203,7 +186,7 @@ function App() {
         {!isLoading && users.length === 0 && <p>No hay usuarios</p>}
 
         {users.length > 0 && hasNextPage && (
-          <button onClick={async () => await fetchNextPage()}>Next</button>
+          <button onClick={async () => await fetchNextPage()}>Load more</button>
         )}
 
         {users.length > 0 && !hasNextPage && <p>No hay más usuarios</p>}

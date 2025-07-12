@@ -1,9 +1,5 @@
 import { fetchUsers } from '../services/users';
-import {
-  useInfiniteQuery,
-  useQueryClient,
-  type InfiniteData,
-} from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { type User } from '../types.d';
 
 export const useUsers = () => {

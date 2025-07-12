@@ -47,7 +47,7 @@ export function UserList({ changeSort, deleteUser, showColors, users }: Props) {
 
           return (
             <tr key={user.cell} style={{ backgroundColor: color }}>
-              <td>
+              <td data-label="Foto">
                 <img
                   title={user.login.username}
                   onClick={() => copyToClipboard(user.login.username)}
@@ -56,11 +56,11 @@ export function UserList({ changeSort, deleteUser, showColors, users }: Props) {
                   alt={user.name.first}
                 />
               </td>
-              <td>{user.name.first}</td>
-              <td>{user.name.last}</td>
-              <td>{user.location.country}</td>
-              <td>{user.dob.age}</td>
-              <td>
+              <td data-label="Nombre">{user.name.first}</td>
+              <td data-label="Apellido">{user.name.last}</td>
+              <td data-label="País">{user.location.country}</td>
+              <td data-label="Edad">{user.dob.age}</td>
+              <td data-label="Acciones">
                 <button onClick={() => deleteUser(user.email)}>Eliminar</button>
               </td>
             </tr>

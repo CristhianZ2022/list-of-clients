@@ -17,3 +17,164 @@ header {
 .pointer {
   cursor: pointer;
 }
+
+
+/* Estilos generales */
+.App {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+header button,
+header input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+header button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+header input {
+  flex: 1;
+  min-width: 150px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Estilos de la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th.pointer {
+  cursor: pointer;
+}
+
+th.pointer:hover {
+  background-color:rgb(169, 163, 163);
+}
+
+td img.pointer {
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+tbody tr {
+  transition: background-color 0.3s;
+}
+
+/* Estilos del botón "Cargar más" */
+main button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+main button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Media query para pantallas de 700px o menos */
+@media (max-width: 700px) {
+  /* Ajustar el header */
+  header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  header button,
+  header input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Convertir la tabla en un diseño de tarjetas */
+  table {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  tr {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+    padding: 5px 10px;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #333;
+    width: 40%;
+  }
+
+  td img {
+    width: 50px;
+    height: 50px;
+  }
+
+  td button {
+    width: 100%;
+    padding: 8px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+}
