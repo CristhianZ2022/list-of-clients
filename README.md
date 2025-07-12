@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Prueba técnica con TypeScript y React
 
 Esto es una prueba técnica de una empresa europea para un sueldo de 55000 €/anuales.
@@ -22,6 +21,57 @@ Los pasos a seguir:
 - [x] Add a new feature that allows the user to sort the data by gender.
 - [x] Add a new feature that allows the user to sort the data by username.
 =======
-# list-of-clients
-LISTA DE CLIENTES, QUE TIENE DIVERSAS FUNCIONES
->>>>>>> efee33a797dd9c15903b4cc63ea5e9339675a7e6
+
+# 🗂️ List of Clients
+
+Una aplicación web moderna para visualizar y gestionar clientes de forma sencilla, rápida y responsiva. Construida con React, Vite y TailwindCSS, esta herramienta demuestra una arquitectura eficiente y un diseño centrado en la experiencia de usuario.
+
+## ✨ Características
+
+- 👤 Listado ordenado de clientes
+- 📱 Diseño responsive adaptado a móviles y pantallas pequeñas (<700px)
+- ⚙️ Componentes reutilizables con React
+- 🎨 Estilos limpios y consistentes con TailwindCSS
+- ⚡ Renderizado veloz gracias a Vite
+- 🔍 Estructura lista para escalar o integrar APIs externas
+
+## 🚀 Tecnologías utilizadas
+
+| Tecnología   | Descripción                                    |
+|-------------|------------------------------------------------|
+| **React**    | Arquitectura basada en componentes y hooks     |
+| **TailwindCSS** | Diseño responsivo con clases utilitarias     |
+| **Vite**     | Dev server rápido y moderno                    |
+| **PNPM**     | Gestor de dependencias ligero y eficiente      |
+
+## 📦 Instalación y ejecución
+
+```bash
+git clone https://github.com/CristhianZ2022/list-of-clients.git
+cd list-of-clients
+pnpm install
+pnpm dev
+
+📁 Estructura del proyecto
+
+src/
+├── components/       # Componentes reutilizables
+├── pages/            # Vistas principales
+├── App.jsx           # Punto de entrada
+├── main.jsx          # Renderizado principal
+└── index.css         # Configuración de TailwindCSS
+
+📱 Responsive <700px
+
+El diseño se adapta automáticamente a pantallas pequeñas usando TailwindCSS con:
+
+flex-col para reorganizar layouts
+
+md:table / md:hidden para mostrar tarjetas tipo "card" en móviles
+
+Paddings dinámicos px-4 sm:px-6 md:px-10
+
+Cards con border, rounded, y shadow para legibilidad
+
+🧑‍💻 Autor
+Desarrollado por Cristhian, apasionado por el desarrollo frontend, el diseño eficiente y las interfaces elegantes.
