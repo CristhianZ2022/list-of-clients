@@ -1,16 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import './App.css';
-import { SortBy, type User } from './types.d';
+import { SortBy } from './types.d';
 import { UserList } from './components/UserList';
+import { useUsers } from './hooks/useUsers';
 
 function App() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [showColors, setShowColors] = useState(false);
+  const { isLoading, isError, users, refetch, fetchNextPage, hasNextPage, deletedUser } = useUsers();
+
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
-  const originalUsers = useRef<User[]>([]);
+
   const [filterCountry, setFilterCountry] = useState<string | null>(null);
   const [filterAge, setFilterAge] = useState<string | null>(null);
+
+  const [showColors, setShowColors] = useState(false);
   const [directionChange, setDirectionChange] = useState(false);
+
+  // const originalUsers = useRef<User[]>([]);
 
   const toggleColors = () => {
     setShowColors(!showColors);
@@ -20,32 +25,39 @@ function App() {
     const newSortingValue =
       sorting === SortBy.NONE ? SortBy.COUNTRY : SortBy.NONE;
     setSorting(newSortingValue);
+    if (newSortingValue === SortBy.NONE) setDirectionChange(false);
   };
 
   const toggleSortByAge = () => {
     const newSortingValue = sorting === SortBy.NONE ? SortBy.AGE : SortBy.NONE;
     setSorting(newSortingValue);
+    if (newSortingValue === SortBy.NONE) setDirectionChange(false);
   };
 
   const toggleSortByGender = () => {
     const newSortingValue =
       sorting === SortBy.NONE ? SortBy.GENDER : SortBy.NONE;
     setSorting(newSortingValue);
+    if (newSortingValue === SortBy.NONE) setDirectionChange(false);
   };
 
   const toggleSortByUsername = () => {
     const newSortingValue =
       sorting === SortBy.NONE ? SortBy.USERNAME : SortBy.NONE;
     setSorting(newSortingValue);
+    if (newSortingValue === SortBy.NONE) setDirectionChange(false);
   };
 
-  const handleRestore = () => {
-    setUsers(originalUsers.current);
+  const handleRestore = async () => {
+    setFilterCountry(null);
+    setFilterAge(null);
+    setSorting(SortBy.NONE);
+    setDirectionChange(false);
+    await refetch();
   };
 
   const handleDeleteUser = (email: string) => {
-    const filteredUsers = users.filter(user => user.email !== email);
-    setUsers(filteredUsers);
+    deletedUser(email.toLowerCase());
   };
 
   const handleChangeSort = (sort: SortBy) => {
@@ -54,18 +66,8 @@ function App() {
   };
 
   const handleDeleteSort = () => {
-    sorting !== SortBy.NONE ? setSorting(SortBy.NONE) : null;
+    setSorting(SortBy.NONE);
   };
-
-  useEffect(() => {
-    fetch('https://randomuser.me/api/?page=3&results=100')
-      .then(res => res.json())
-      .then(res => {
-        setUsers(res.results);
-        originalUsers.current = res.results;
-      })
-      .catch(err => console.log(err));
-  }, []);
 
   const filteredUsers = useMemo(() => {
     return filterCountry !== null && filterCountry?.length > 0
@@ -82,10 +84,7 @@ function App() {
   }, [users, filterCountry, filterAge]);
 
   const sortedUsers = useMemo(() => {
-    if (sorting === SortBy.NONE) {
-      setDirectionChange(false);
-      return filteredUsers;
-    }
+    if (sorting === SortBy.NONE) return filteredUsers;
 
     if (sorting === SortBy.NAME) {
       return directionChange
@@ -191,12 +190,23 @@ function App() {
         </button>
       </header>
       <main>
-        <UserList
-          changeSort={handleChangeSort}
-          deleteUser={handleDeleteUser}
-          showColors={showColors}
-          users={sortedUsers}
-        />
+        {users.length > 0 && (
+          <UserList
+            changeSort={handleChangeSort}
+            deleteUser={handleDeleteUser}
+            showColors={showColors}
+            users={sortedUsers}
+          />
+        )}
+        {isLoading && <div>Cargando...</div>}
+        {isError && <div>Error</div>}
+        {!isLoading && users.length === 0 && <p>No hay usuarios</p>}
+
+        {users.length > 0 && hasNextPage && (
+          <button onClick={async () => await fetchNextPage()}>Next</button>
+        )}
+
+        {users.length > 0 && !hasNextPage && <p>No hay más usuarios</p>}
       </main>
     </div>
   );
